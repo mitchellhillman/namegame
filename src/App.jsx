@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { createUseStyles } from 'react-jss';
+import Quiz from './Quiz';
 
 const useStyles = createUseStyles({
   root: {
@@ -8,9 +10,19 @@ const useStyles = createUseStyles({
 });
 function App() {
   const classes = useStyles();
+  const [names, setNames] = useState(undefined);
+
+  useEffect(() => {
+    axios.get('https://namegame.willowtreeapps.com/api/v1.0/profiles').then((res) => {
+      setNames(res.data);
+    });
+  }, []);
+
   return (
     <div className={classes.root}>
-      Name game
+      {names
+        ? <Quiz names={names} />
+        : 'Loading...'}
     </div>
   );
 }
